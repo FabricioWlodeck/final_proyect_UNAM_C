@@ -3,13 +3,12 @@
 #include<stdbool.h>
 #include<windows.h>
 #include<string.h>
-
+/* ------------------  ESTRUCTURAS BASE  ------------------ */
 struct nodoIngrediente {
     char nombre[30];
     int cant;
     struct nodoIngrediente *sig; 
 };
-
 
 struct nodoHamburguesa{
     char nombre[30];
@@ -18,7 +17,16 @@ struct nodoHamburguesa{
     struct nodoHamburguesa *sig;
 };
 
+struct nodoTicket{
+    char nombre[30];
+    int cantidad;
+    int precio_total;
+    char fecha_hora[128];
+    struct nodoTicket *sig;
+};
 
+/* ------------------  FUNCIONES  ------------------ */
+/* ------------------  FUNCIONES INGREDIENTE  ------------------ */
 struct nodoIngrediente *crearNodoI(char nombre[30], int cant){
     struct nodoIngrediente *nuevoNodo; 
     nuevoNodo = malloc(sizeof(struct nodoIngrediente));        
@@ -59,6 +67,8 @@ void mostrarListaI(struct nodoIngrediente *ingrediente){
         
     }
 }
+
+/* ------------------  FUNCIONES HAMBURGUESAS  ------------------ */
 
 struct nodoHamburguesa *crearNodoH(char nombre[30], int presio,struct nodoIngrediente *ingreHamb){
     struct nodoHamburguesa *nuevoNodo = malloc(sizeof(struct nodoHamburguesa));        
@@ -110,21 +120,77 @@ void mostrarListaH(struct nodoHamburguesa *hamburguesas){
     }
 }
 
-bool venta(struct nodoIngrediente *ingreHamb, struct nodoIngrediente *ingredientes){
+/* ------------------  FUNCIONES TICKETS  ------------------ */
+
+struct nodoTicket *crearNodoT(char nombre[30],int cantidad ,int presio, char tiempo[128]){
+    struct nodoTicket *nuevoNodo = malloc(sizeof(struct nodoTicket));        
+    strcpy(nuevoNodo->nombre,nombre);
+    nuevoNodo->cantidad=cantidad;
+    nuevoNodo->precio_total= presio;
+    nuevoNodo->sig = NULL;
+
+    return nuevoNodo;
+}
+
+struct nodoTicket *insertarNodoT(struct nodoTicket *tickets, char nombre[30],int cantidad ,int presio, char tiempo[128]){
+
+    if(tickets == NULL)
+    return crearNodoT(nombre, cantidad, presio, tiempo);
+
+    else
+    tickets->sig = insertarNodoT(tickets->sig,nombre, cantidad, presio, tiempo);
+    
+    return tickets;
+}
+
+void mostrarListaT(struct nodoTicket *tickets){
+    int size_nodo = sizeof(struct nodoTicket); 
+    struct nodoTicket *actual=malloc(size_nodo); 
+    actual = tickets;
+
+    struct nodoTicket *tickets=malloc(size_nodo); 
+    
+    if(tickets == NULL){
+        printf("\n\n!! La lista de Tickets esta vacia !!\n\n");
+    }
+
+    else{
+        printf("\n\nLISTA DE TICKETS VENDIDOS \n");
+        while (actual != NULL){
+            printf("\n --------- ");
+            printf("\t\t---------- TICKET GENERADO ---------\n\n");
+            printf("\nProducto: %s. \n",actual->nombre);
+            printf("\nCantidad: %d. \n",actual->cantidad);
+            printf("\nValor total: %d. \n",actual->precio_total);
+            printf("\nProducto: %s. \n",actual->fecha_hora);
+            actual=actual->sig;
+        }
+    }
+}
+
+/* ------------------  FUNCION VENTA ------------------ */
+
+struct nodoTicket *venta(struct nodoTicket *tickets,struct nodoIngrediente *ingreHamb, struct nodoIngrediente *ingredientes,bool *resultado_operacion){
     int size_nodo = sizeof(struct nodoIngrediente); 
     struct nodoIngrediente *actual=malloc(size_nodo);
+
+    int size_nodo = sizeof(struct nodoTicket); 
+    struct nodoTicket *actualT=malloc(size_nodo);
+
     bool sepuedevender=false;
     while(ingreHamb != NULL){
         actual = ingredientes;
         while(actual != NULL){
             if(strcmp(ingreHamb->nombre,actual->nombre)==0){
                 if(actual->cant >= ingreHamb->cant){
-                    sepuedevender = true;
+                    //devuelve si salio bien la venta
+                    resultado_operacion = true;
                     actual->cant -= ingreHamb->cant;
                 }
                 else{
                     printf("No hay suficiente %s",ingreHamb->nombre);
-                    sepuedevender = false;
+                    //devuelve si salio mal la venta
+                    resultado_operacion = false;
                 }
             }
             actual=actual->sig;
@@ -133,6 +199,9 @@ bool venta(struct nodoIngrediente *ingreHamb, struct nodoIngrediente *ingredient
     }
     return sepuedevender;
 }
+
+/* ------------------  FUNCION RESTOCK DE INGREDIENTES ------------------ */
+
 void restockear(struct nodoIngrediente *ingredientes, char nombre[30],int cant){
     int size_nodo = sizeof(struct nodoIngrediente); 
     struct nodoIngrediente *actual=malloc(size_nodo);
@@ -151,6 +220,8 @@ int main(){
     struct nodoIngrediente *auxI=NULL;
     struct nodoHamburguesa *auxH=NULL;
     struct nodoIngrediente *listaIngre=NULL;
+    /* ------------------  TICKET  ------------------ */
+    struct nodoTicket *listaTicket=NULL;
 
     char nombre[30],nombre1[30],respuesta,opc,opc2;
     int aux=0,cant,cant1;
@@ -283,6 +354,8 @@ int main(){
                 }
 
                 listaIngre = auxH->IngrHamburguesa;
+                listaTicket = venta(listaTicket,listaIngre,ingredientes);
+                
                 if(venta(listaIngre,ingredientes))
                     printf("Vendido.");
                 else printf("No hay ingredientes suficientes");
