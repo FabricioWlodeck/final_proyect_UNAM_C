@@ -159,12 +159,12 @@ void mostrarListaT(struct nodoTicket *tickets){
     else{
         while (actual != NULL){
             
-            printf("\n\n\t\t------------------ TICKETS N%d --------------------\n",i);
-            printf("\tProducto: %s.",actual->nombre);
+            printf("\n\n\t\t------------------ TICKET N%d --------------------\n",i);
+            printf("\nProducto: %s.",actual->nombre);
             /* printf("\nCantidad: %d. \n",actual->cantidad); */
-            printf("\tValor total: $%d.",actual->precio_total);
+            printf("\nValor total: $%d.",actual->precio_total);
 
-            printf("\tFecha y Hora: %s.\n",actual->fecha_hora);
+            printf("\nFecha y Hora: %s.\n",actual->fecha_hora);
             actual=actual->sig;
             i++;
         }
@@ -361,7 +361,7 @@ int main(){
                     struct tm *tlocal = localtime(&tiempo);
                     char horario[128];
                     strftime(horario,128,"%Y-%m-%d  %H:%M:%S",tlocal);
-                    printf("\n\t%s\n",horario);
+                    printf("\n%s\n",horario);
                     listaTicket = insertarNodoT(listaTicket,auxH->nombre/* ,cantidad */,auxH->precio,horario);
                 }
                     
