@@ -107,7 +107,7 @@ void mostrarListaH(struct nodoHamburguesa *hamburguesas){
     else{
         printf("\nLista de Hamburguesas: \n");
         while (actual != NULL){
-            printf("%s \t$%d\n",actual->nombre, actual->precio);
+            printf("\n%s \t$%d\n",actual->nombre, actual->precio);
             ingredientes = actual->IngrHamburguesa;
                 while(ingredientes != NULL){
                     if(ingredientes->sig == NULL)
@@ -176,25 +176,46 @@ void mostrarListaT(struct nodoTicket *tickets){
 bool venta(struct nodoIngrediente *ingreHamb, struct nodoIngrediente *ingredientes){
     int size_nodo = sizeof(struct nodoIngrediente); 
     struct nodoIngrediente *actual=malloc(size_nodo);
+
+    struct nodoIngrediente *actual2=malloc(size_nodo);
+    actual2 = ingreHamb;
     bool sepuedevender=false;
-    while(ingreHamb != NULL){
+    while(actual2 != NULL){
         actual = ingredientes;
         while(actual != NULL){
-            if(strcmp(ingreHamb->nombre,actual->nombre)==0){
-                if(actual->cant >= ingreHamb->cant){
+            if(strcmp(actual2 ->nombre,actual->nombre)==0){
+                if(actual->cant >= actual2 ->cant){
                     //devuelve si salio bien la venta
                     sepuedevender = true;
-                    actual->cant -= ingreHamb->cant;
                 }
                 else{
-                    printf("No hay suficiente %s",ingreHamb->nombre);
+                    printf("No hay suficiente %s",actual2 ->nombre);
                     //devuelve si salio mal la venta
                     sepuedevender = false;
                 }
             }
             actual=actual->sig;
         }
-        ingreHamb=ingreHamb->sig;    
+        actual2 =actual2 ->sig;    
+    }
+    actual2 = ingreHamb;
+    if(sepuedevender == true){
+        while(actual2  != NULL){
+        actual = ingredientes;
+        while(actual != NULL){
+            if(strcmp(actual2 ->nombre,actual->nombre)==0){
+                if(actual->cant >= actual2 ->cant){
+
+                    actual->cant -= actual2 ->cant;
+                    if(actual->cant <= 6){
+                        
+                    }
+                }
+            }
+            actual=actual->sig;
+        }
+        actual2 =actual2 ->sig;    
+        }   
     }
     return sepuedevender;
 }
@@ -222,8 +243,8 @@ int main(){
     /* ------------------  TICKET  ------------------ */
     struct nodoTicket *listaTicket=NULL;
 
-    char nombre[30],nombre1[30],respuesta,opc,opc2;
-    int aux=0,cant,cant1;
+    char nombreI[30],nombreH[30],respuesta,opc,opc2;
+    int aux=0,cantI,cantH;
     bool menu=true;
 
     ingredientes = insertarNodoI(ingredientes,"Pan",2);
@@ -252,12 +273,12 @@ int main(){
         printf("\n1. Cargar Ingredientes.");
         printf("\n2. Ver lista de Ingredientes.");
         printf("\n3. Realizar Venta.");
-        printf("\n4. Ver ventas hasta el momento. ---- OUT OF SERVICE ----");
+        printf("\n4. Ver ventas hasta el momento. ---- LAST UPDATE ----");
         printf("\n5. ---- OUT OF SERVICE ---- .");
         printf("\n6. ---- OUT OF SERVICE ---- .");
         printf("\n7. ---- OUT OF SERVICE ---- .");
         printf("\n8. Ver Lista de hamburguesas.");
-        printf("\n9. Ingresar nueva hamburguesa.");
+        printf("\n9. Ingresar nueva hamburguesa."); // posible error cuando quieres realizar venta de hamburguesa cargada
         printf("\nF. Salir\n");
         printf("\nOpcion a Ingresar: ");
         scanf("%c", &respuesta);
@@ -289,25 +310,25 @@ int main(){
                             scanf("%d",&aux);
                             fflush(stdin);
                             printf("Cantidad: "); 
-                            scanf("%d",&cant);
+                            scanf("%d",&cantI);
                             fflush(stdin);
                             auxI= ingredientes;
 
                             for(int i=0;i<(aux-1);i++){
                                 auxI=auxI->sig;
                             }
-                            restockear(ingredientes,auxI->nombre,cant);
+                            restockear(ingredientes,auxI->nombre,cantI);
                             break;
                             
                         case '2':
                             do{
                                 printf("Nombre: ");
-                                gets(nombre);
+                                gets(nombreI);
                                 fflush(stdin);
                                 printf("Cantidad: "); 
-                                scanf("%d",&cant);
+                                scanf("%d",&cantI);
                                 fflush(stdin);                
-                                ingredientes = insertarNodoI(ingredientes,nombre,cant);
+                                ingredientes = insertarNodoI(ingredientes,nombreI,cantI);
                                 printf("Desea ingresar otro ingrediente? [Y/N]: ");
                                 scanf("%c",&opc);
                                 fflush(stdin);
@@ -393,29 +414,31 @@ int main(){
             break;
 
             case '9':
+            //CAPAZ HAY ALGO MAL ACA !!!!!!!!
                 printf("\t\t---------------- Opcion 6 ----------------\n");
                 printf("\t\t---------- Carga de Hamburguesa ----------\n");
                 do{
                     printf("Nombre: ");
-                    gets(nombre1);
+                    gets(nombreH);
                     fflush(stdin);
                     printf("Precio: "); 
-                    scanf("%d",&cant1);
+                    scanf("%d",&cantH);
                     fflush(stdin); 
                     printf("Ingredientes: \n");
+                    listaIngre=NULL;
                     do{
                         printf("\tNombre: ");
-                        gets(nombre);
+                        gets(nombreI);
                         fflush(stdin);
                         printf("\tCantidad: "); 
-                        scanf("%d",&cant);
+                        scanf("%d",&cantI);
                         fflush(stdin);                
-                        listaIngre = insertarNodoI(listaIngre,nombre,cant);
+                        listaIngre = insertarNodoI(listaIngre,nombreI,cantI);
                         printf("\tDesea ingresar otro ingrediente? [Y/N]: ");
                         scanf("%c",&opc2);
                         fflush(stdin);
                     }while(opc2 != 'n' && opc2 != 'N');               
-                    hamburguesas = insertarNodoH(hamburguesas,nombre,cant,listaIngre);
+                    hamburguesas = insertarNodoH(hamburguesas,nombreH,cantH,listaIngre);
                     printf("Desea agregar otra hamburguesa? [Y/N]: ");
                     scanf("%c",&opc);
                     fflush(stdin);
