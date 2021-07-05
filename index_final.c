@@ -150,57 +150,50 @@ void mostrarListaH(struct nodoHamburguesa *hamburguesas){
 
 /* ------------------- FUNCION COMPARACION VENTAS ------------------- */
 
-bool venta(struct nodoHamburguesa *listaVenta, struct nodoIngrediente *ingredientes, int cant){
+bool venta(struct nodoIngrediente *ingre_vender, struct nodoIngrediente *ingredientes, int cant){
     bool sepuedevender=false;
     int aux1 = 1;
     struct nodoIngrediente *nuevoNodo= malloc(sizeof(struct nodoIngrediente));
     struct nodoIngrediente *aux= malloc(sizeof(struct nodoIngrediente));
-    struct nodoHamburguesa *actual= malloc(sizeof(struct nodoHamburguesa));
+    struct nodoIngrediente *actual= malloc(sizeof(struct nodoIngrediente));
 
-    actual = listaVenta; 
+    actual = ingre_vender; 
 
-    while(actual != NULL && aux1 ==1){
-        aux = actual->IngrHamburguesa;
-        while(aux != NULL){
+    aux = actual;
+    
+    while(aux != NULL && aux1 ==1){
+        nuevoNodo = ingredientes;
+        while(nuevoNodo != NULL){
+            if(strcmp((aux->nombre),nuevoNodo->nombre)==0){
+                if(nuevoNodo->cant >= (aux->cant)*cant){
+                    sepuedevender = true;
+                }
+                else{
+                    printf("No hay suficiente %s, cantidad actual: %d\n",aux->nombre,nuevoNodo->cant);
+                    sepuedevender = false;
+                    aux1 = 0;
+                }
+            }
+            nuevoNodo=nuevoNodo->sig;
+        }
+        aux = aux->sig; 
+    }
+
+    actual = ingre_vender;
+
+    if(sepuedevender){
+        aux = actual; 
+        while(aux != NULL){  
             nuevoNodo = ingredientes;
             while(nuevoNodo != NULL){
                 if(strcmp((aux->nombre),nuevoNodo->nombre)==0){
-                    if(nuevoNodo->cant >= (aux->cant)*cant){
-                        sepuedevender = true;
-                        printf("\nHabia %d de %s y se le quieren descontar %d * %d",nuevoNodo->cant,nuevoNodo->nombre,aux->cant,cant);
-                    }
-                    else{
-                        printf("\nNo hay suficiente %s, cantidad actual: %d\n",aux->nombre,nuevoNodo->cant);
-                        sepuedevender = false;
-                        aux1 = 0;
-                    }
+                //printf("habia: %s %d y desconte %s %d * %d",nuevoNodo->nombre,nuevoNodo->cant,aux->nombre,aux->cant,cant);
+                    nuevoNodo->cant -= (aux->cant*cant);
                 }
                 nuevoNodo=nuevoNodo->sig;
             }
-            aux = aux->sig; 
-        }
-        actual=actual->sig;
-    }
-
-    actual = listaVenta;
-    printf("\n%d",aux1);
-    if(sepuedevender && aux1){
-        while(actual != NULL){   
-            aux = actual->IngrHamburguesa; 
-            while(aux != NULL){  
-                nuevoNodo = ingredientes;
-                while(nuevoNodo != NULL){
-                    if(strcmp((aux->nombre),nuevoNodo->nombre)==0){
-                        printf("\nHabia %d %s y se descontaron %d * %d (cantidad de hambur pedidas)  y quedaron en total = ",nuevoNodo->cant,nuevoNodo->nombre,aux->cant,cant);      
-                        nuevoNodo->cant =  nuevoNodo->cant- ((aux->cant)*cant);
-                        printf("%d\n",nuevoNodo->cant);
-                    }     
-                    nuevoNodo=nuevoNodo->sig;
-                }
-                aux=aux->sig; 
-            }   
-            actual=actual->sig;
-        }
+            aux=aux->sig; 
+        }   
     }
 
     return sepuedevender;
@@ -242,7 +235,7 @@ void mostrarListaT(struct nodoTicket *tickets){
 
     else{
         while (actual != NULL){ 
-            printf("\n\n\t\t------------------ TICKET N%d --------------------\n",i);
+            printf("\n\n\t\t------------------ TICKET N %d --------------------\n",i);
             printf("\nProducto(s):");
             struct nodoHamburguesa *aux= malloc(sizeof(struct nodoHamburguesa));
             aux = actual->hamburVender;
@@ -474,7 +467,6 @@ int main(){
                     switch (opc){
                         case '1':   
                                 auxH=NULL; auxH1=NULL; cantidades=NULL;aux2=0;
-                                int iterador_ventas=0;
                             do{
                                 aux1=0;
                                 aux=1;
@@ -502,20 +494,13 @@ int main(){
 
                                 auxH1=insertarNodoH(auxH1,auxH->nombre,auxH->precio,auxH->IngrHamburguesa);
 
-                                printf("!! No hay ingredientes suficientes !!\n");
-
-                                for(int i=0;i<iterador_ventas;i++){
-                                    auxH1= auxH1->sig;
-                                    printf("!! SE ENTRO AL IF ITERADOR DE AUXH1 !!\n");
-                                }
-
-                                if(venta(auxH1,ingredientes,aux1)){
+                                if(venta(auxH->IngrHamburguesa,ingredientes,aux1)){
                                     aux2 = 1;    
-                                    cantidades = insertarNodoCantidad(cantidades,aux1);            
+                                    cantidades = insertarNodoCantidad(cantidades,aux1);              
                                 }
 
                                 else printf("!! No hay ingredientes suficientes !!\n");
-                                iterador_ventas++;
+
                                 printf("\nDesea agregar otra Hamburguesa? [Y/N]: ");
                                 scanf("%c",&opc);
                                 fflush(stdin);
