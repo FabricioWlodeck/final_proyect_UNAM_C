@@ -5,9 +5,10 @@
 #include<string.h>
 #include<time.h>
 
-struct nodo{
+
+struct nodoCantidadH{
     int cant;
-    struct nodo *sig;
+    struct nodoCantidadH *sig;
 };
 
 struct nodoIngrediente {
@@ -25,26 +26,26 @@ struct nodoHamburguesa{
 
 struct nodoTicket{
     struct nodoHamburguesa *hamburVender;
-    struct nodo *cantidad;
+    struct nodoCantidadH *cantidad;
     int precio_total;
     char fecha_hora[128];
     struct nodoTicket *sig;
 };
 
-struct nodo *crear(int cant){
-    struct nodo *nuevo_nodo =malloc(sizeof(struct nodo));
+struct nodoCantidadH *crearNodoCantidad(int cant){
+    struct nodoCantidadH *nuevo_nodo =malloc(sizeof(struct nodoCantidadH));
     nuevo_nodo->cant = cant;
     nuevo_nodo->sig = NULL;
     return nuevo_nodo;
 }
 
-struct nodo *insertar(struct nodo *cantidades, int cant){
+struct nodoCantidadH *insertarNodoCantidad(struct nodoCantidadH *cantidades, int cant){
     
     if(cantidades == NULL)
-    return crear(cant);
+    return crearNodoCantidad(cant);
     
     else
-    cantidades->sig = insertar(cantidades->sig,cant);
+    cantidades->sig = insertarNodoCantidad(cantidades->sig,cant);
 }
 
 
@@ -151,45 +152,52 @@ void mostrarListaH(struct nodoHamburguesa *hamburguesas){
 
 bool venta(struct nodoHamburguesa *listaVenta, struct nodoIngrediente *ingredientes, int cant){
     bool sepuedevender=false;
+    int aux1 = 1;
     struct nodoIngrediente *nuevoNodo= malloc(sizeof(struct nodoIngrediente));
+    struct nodoIngrediente *aux= malloc(sizeof(struct nodoIngrediente));
     struct nodoHamburguesa *actual= malloc(sizeof(struct nodoHamburguesa));
 
     actual = listaVenta; 
 
-    while(actual != NULL){
-        while(actual->IngrHamburguesa != NULL){
+    while(actual != NULL && aux1 ==1){
+        aux = actual->IngrHamburguesa;
+        while(aux != NULL){
             nuevoNodo = ingredientes;
             while(nuevoNodo != NULL){
-                if(strcmp((actual->IngrHamburguesa->nombre),nuevoNodo->nombre)==0){
-                    if(nuevoNodo->cant >= (actual->IngrHamburguesa->cant)*cant){
+                if(strcmp((aux->nombre),nuevoNodo->nombre)==0){
+                    if(nuevoNodo->cant >= (aux->cant)*cant){
                         sepuedevender = true;
+                        printf("\nHabia %d de %s y se le quieren descontar %d * %d",nuevoNodo->cant,nuevoNodo->nombre,aux->cant,cant);
                     }
                     else{
-                        printf("No hay suficiente %s, cantidad actual: %d\n",actual->IngrHamburguesa->nombre,nuevoNodo->cant);
+                        printf("\nNo hay suficiente %s, cantidad actual: %d\n",aux->nombre,nuevoNodo->cant);
                         sepuedevender = false;
-                        break;
+                        aux1 = 0;
                     }
                 }
                 nuevoNodo=nuevoNodo->sig;
             }
-            actual->IngrHamburguesa = actual->IngrHamburguesa->sig; 
+            aux = aux->sig; 
         }
         actual=actual->sig;
     }
 
     actual = listaVenta;
-
-    if(sepuedevender){
-        while(actual != NULL){    
-            while(actual->IngrHamburguesa != NULL){  
+    printf("\n%d",aux1);
+    if(sepuedevender && aux1){
+        while(actual != NULL){   
+            aux = actual->IngrHamburguesa; 
+            while(aux != NULL){  
                 nuevoNodo = ingredientes;
                 while(nuevoNodo != NULL){
-                    if(strcmp((actual->IngrHamburguesa->nombre),nuevoNodo->nombre)==0){
-                            printf("entre a descontar");
-                            nuevoNodo->cant =  nuevoNodo->cant-(actual->IngrHamburguesa->cant)*cant;}        
+                    if(strcmp((aux->nombre),nuevoNodo->nombre)==0){
+                        printf("\nHabia %d %s y se descontaron %d * %d (cantidad de hambur pedidas)  y quedaron en total = ",nuevoNodo->cant,nuevoNodo->nombre,aux->cant,cant);      
+                        nuevoNodo->cant =  nuevoNodo->cant- ((aux->cant)*cant);
+                        printf("%d\n",nuevoNodo->cant);
+                    }     
                     nuevoNodo=nuevoNodo->sig;
                 }
-                actual->IngrHamburguesa=actual->IngrHamburguesa->sig; 
+                aux=aux->sig; 
             }   
             actual=actual->sig;
         }
@@ -200,7 +208,7 @@ bool venta(struct nodoHamburguesa *listaVenta, struct nodoIngrediente *ingredien
 
 /* ------------------  FUNCIONES TICKETS  ------------------ */
 
-struct nodoTicket *crearNodoT(struct nodoHamburguesa *listaVenta,struct nodo *cantidades, char tiempo[128],int preciofinal){
+struct nodoTicket *crearNodoT(struct nodoHamburguesa *listaVenta,struct nodoCantidadH *cantidades, char tiempo[128],int preciofinal){
     struct nodoTicket *nuevoNodo = malloc(sizeof(struct nodoTicket));        
     nuevoNodo->hamburVender=listaVenta;
     nuevoNodo->cantidad=cantidades; 
@@ -211,7 +219,7 @@ struct nodoTicket *crearNodoT(struct nodoHamburguesa *listaVenta,struct nodo *ca
     return nuevoNodo;
 }
 
-struct nodoTicket *insertarNodoT(struct nodoTicket *tickets,struct nodoHamburguesa *listaVenta,struct nodo *cantidades, char tiempo[128],int preciofinal){
+struct nodoTicket *insertarNodoT(struct nodoTicket *tickets,struct nodoHamburguesa *listaVenta,struct nodoCantidadH *cantidades, char tiempo[128],int preciofinal){
 
     if(tickets == NULL)
     return crearNodoT(listaVenta, cantidades, tiempo,preciofinal);
@@ -238,7 +246,7 @@ void mostrarListaT(struct nodoTicket *tickets){
             printf("\nProducto(s):");
             struct nodoHamburguesa *aux= malloc(sizeof(struct nodoHamburguesa));
             aux = actual->hamburVender;
-            struct nodo *aux1 =malloc(sizeof(struct nodo));
+            struct nodoCantidadH *aux1 =malloc(sizeof(struct nodoCantidadH));
             aux1 = actual->cantidad;
             while(aux != NULL){    
                 printf("\n\t%s (%d) $%d.",aux->nombre,aux1->cant,aux->precio);
@@ -264,7 +272,7 @@ int main(){
     struct nodoHamburguesa *auxH1=NULL;
     struct nodoIngrediente *listaIngre=NULL;
     struct nodoTicket *listaTicket=NULL;
-    struct nodo *cantidades = NULL;
+    struct nodoCantidadH *cantidades = NULL;
 
     char nombre[30],nombre1[30],respuesta,opc,opc2;
     int aux,aux1,aux2=0,cant,cant1;
@@ -317,7 +325,7 @@ int main(){
                 printf("\t\t---------------- Opcion 1 ----------------\n");
                 printf("\t\t-------------- Ingredientes --------------\n\n");
                     printf("\n1. Cargar nuevo Ingrediente.");
-                    printf("\n2. Actualizar Stock Ingredientes.");
+                    printf("\n2. Actualizar Ingredientes.");
                     printf("\n3. Ver Lista de Ingredientes.");
                     printf("\nF. Salir\n");
                     printf("\nOpcion a Ingresar: ");
@@ -452,6 +460,7 @@ int main(){
             break;
 
             case '3':
+
                 do{
                     system("cls");
                     printf("\t\t---------------- Opcion 3 ----------------\n");
@@ -464,8 +473,10 @@ int main(){
                     fflush(stdin);
                     switch (opc){
                         case '1':   
-                            auxH1=NULL; cantidades=NULL;
+                                auxH=NULL; auxH1=NULL; cantidades=NULL;aux2=0;
+                                int iterador_ventas=0;
                             do{
+                                aux1=0;
                                 aux=1;
                                 printf("Hamburguesas disponibles:\n");
                                 fflush(stdin);
@@ -484,29 +495,38 @@ int main(){
                                 fflush(stdin);
                                 auxH = hamburguesas;
                                 fflush(stdin);
+
                                 for(int i=0;i<(aux-1);i++){
                                     auxH=auxH->sig;
                                 }
+
                                 auxH1=insertarNodoH(auxH1,auxH->nombre,auxH->precio,auxH->IngrHamburguesa);
+
+                                printf("!! No hay ingredientes suficientes !!\n");
+
+                                for(int i=0;i<iterador_ventas;i++){
+                                    auxH1= auxH1->sig;
+                                    printf("!! SE ENTRO AL IF ITERADOR DE AUXH1 !!\n");
+                                }
 
                                 if(venta(auxH1,ingredientes,aux1)){
                                     aux2 = 1;    
-                                    cantidades = insertar(cantidades,aux1);              
+                                    cantidades = insertarNodoCantidad(cantidades,aux1);            
                                 }
 
                                 else printf("!! No hay ingredientes suficientes !!\n");
-
+                                iterador_ventas++;
                                 printf("\nDesea agregar otra Hamburguesa? [Y/N]: ");
                                 scanf("%c",&opc);
                                 fflush(stdin);
 
                             }while(opc != 'n' && opc != 'N');
 
-                            if(aux2){
+                            if(aux2==1){
                                 /* ----------------  obtengo precio total ---------------- */
                                 struct nodoHamburguesa *aux4= malloc(sizeof(struct nodoHamburguesa));
                                 aux4 = auxH1;
-                                struct nodo *aux5 =malloc(sizeof(struct nodo));
+                                struct nodoCantidadH *aux5 =malloc(sizeof(struct nodoCantidadH));
                                 aux5 = cantidades;
                                 aux1 = 0;
                                 while(aux4 != NULL){    
@@ -525,6 +545,7 @@ int main(){
                                 printf("\nPrecio total: $%d",aux1);
                                 printf("\n%s\n",horario);
 
+                                /* ------------------  inserto el ticket  ------------------ */
                                 listaTicket = insertarNodoT(listaTicket,auxH1,cantidades,horario,aux1);  
                             }
 
