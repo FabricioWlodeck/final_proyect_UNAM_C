@@ -32,22 +32,192 @@ struct nodoTicket{
     struct nodoTicket *sig;
 };
 
-struct nodoCantidadH *crearNodoCantidad(int cant){
-    struct nodoCantidadH *nuevo_nodo =malloc(sizeof(struct nodoCantidadH));
-    nuevo_nodo->cant = cant;
-    nuevo_nodo->sig = NULL;
-    return nuevo_nodo;
+
+/* ------------------- Colores ------------------- */
+
+void titos(){
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE|FOREGROUND_GREEN);
+    printf("\t\t---------------- "); 
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+    printf(" Sistema Control ");
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE);
+    printf(" ----------------\n");
+    SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
+    printf("\t\t--------------- ");
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+    printf("Tito's Burguer & Co"); 
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
+    printf(" ---------------\n");
+
+    SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE|FOREGROUND_GREEN);
+    printf("1");
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+    printf(". Ingredientes.\n");
+
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE);
+    printf("2");
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+    printf(". Hamburguesas.\n");
+
+    SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
+    printf("3");
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+    printf(". Ventas.\n");
+
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
+    printf("F");
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+    printf(". Finalizar dia.\n\n");
+
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_GREEN);
+    printf(" > ");
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+    printf("Opcion a Ingresar: ");
+}   
+
+void menu1(){
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE|FOREGROUND_GREEN);
+    printf("\t\t---------------- "); 
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+    printf("Opcion 1");
+    SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE|FOREGROUND_GREEN);
+    printf(" ----------------\n");
+    printf("\t\t-------------- ");
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+    printf("Ingredientes"); 
+    SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE|FOREGROUND_GREEN);
+    printf(" --------------\n");
+
+    SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE|FOREGROUND_GREEN);
+    printf("1");
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+    printf(". Cargar nuevo Ingrediente.\n");
+
+    SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE|FOREGROUND_GREEN);
+    printf("2");
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+    printf(". Actualizar Ingredientes.\n");
+
+    SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE|FOREGROUND_GREEN);
+    printf("3");
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+    printf(". Ver Lista de Ingredientes.\n");
+
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
+    printf("F");
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+    printf(". Salir\n\n");
+
+    SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE|FOREGROUND_GREEN);
+    printf("> ");
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+    printf("Opcion a Ingresar: ");
 }
 
-struct nodoCantidadH *insertarNodoCantidad(struct nodoCantidadH *cantidades, int cant){
-    
-    if(cantidades == NULL)
-    return crearNodoCantidad(cant);
-    
-    else
-    cantidades->sig = insertarNodoCantidad(cantidades->sig,cant);
+void salir1(){
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE|FOREGROUND_GREEN);
+    printf("\nSaliendo...\n\n");
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
 }
 
+void menu2(){
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE);
+    printf("\t\t---------------- "); 
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+    printf("Opcion 2");
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE);
+    printf(" ----------------\n");
+    printf("\t\t---------- ");
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+    printf("Menu de Hamburguesas"); 
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE);
+    printf(" ----------\n");
+
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE);
+    printf("1");
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+    printf(". Ver Lista de Hambuguesas.\n");
+
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE);
+    printf("2");
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+    printf(". Cargar Nueva hamburguesa.\n");
+
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
+    printf("F");
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+    printf(". Salir\n\n");
+
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE);
+    printf("> ");
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+    printf("Opcion a Ingresar: ");    
+}
+
+void salir2(){
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE);
+    printf("\nSaliendo...\n\n");
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+}
+
+void menu3(){
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
+    printf("\t\t---------------- "); 
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+    printf("Opcion 3");
+    SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
+    printf(" ----------------\n");
+    printf("\t\t------------- ");
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+    printf("Menu de Ventas"); 
+    SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
+    printf(" -------------\n");
+
+    SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
+    printf("1");
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+    printf(". Realizar Venta.\n");
+
+    SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
+    printf("2");
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+    printf(". Mostrar Ventas.\n");
+
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
+    printf("F");
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+    printf(". Salir\n\n");
+
+    SetConsoleTextAttribute(hConsole,FOREGROUND_GREEN);
+    printf("> ");
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+    printf("Opcion a Ingresar: "); 
+}
+
+void salir3(){
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
+    printf("\nSaliendo...\n\n");
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+}
+
+void fin(){
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
+    printf("S");
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+    printf("/");
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
+    printf("N");
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+    printf("]: ");
+}
 
 /* ------------------- Carga de Ingredientes ------------------- */
 
@@ -189,6 +359,20 @@ bool venta(struct nodoIngrediente *ingre_vender, struct nodoIngrediente *ingredi
                 if(strcmp((aux->nombre),nuevoNodo->nombre)==0){
                 //printf("habia: %s %d y desconte %s %d * %d",nuevoNodo->nombre,nuevoNodo->cant,aux->nombre,aux->cant,cant);
                     nuevoNodo->cant -= (aux->cant*cant);
+                    if(nuevoNodo->cant < 10){
+                        if(nuevoNodo->cant < 5){
+                            HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+                            SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
+                            printf("\n\tATENCION: Quedan menos de 5 %s en stock.\n",nuevoNodo->nombre);
+                            SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+                        }
+                        else{
+                            HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+                            SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
+                            printf("\n\tATENCION: Quedan menos de 10 %s en stock.\n",nuevoNodo->nombre);
+                            SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+                        }
+                    }
                 }
                 nuevoNodo=nuevoNodo->sig;
             }
@@ -198,6 +382,26 @@ bool venta(struct nodoIngrediente *ingre_vender, struct nodoIngrediente *ingredi
 
     return sepuedevender;
 }
+
+/* ------------------- Carga de cantidades ------------------- */
+
+struct nodoCantidadH *crearNodoCantidad(int cant){
+    struct nodoCantidadH *nuevo_nodo =malloc(sizeof(struct nodoCantidadH));
+    nuevo_nodo->cant = cant;
+    nuevo_nodo->sig = NULL;
+    return nuevo_nodo;
+}
+
+struct nodoCantidadH *insertarNodoCantidad(struct nodoCantidadH *cantidades, int cant){
+    
+    if(cantidades == NULL)
+    return crearNodoCantidad(cant);
+    
+    else
+    cantidades->sig = insertarNodoCantidad(cantidades->sig,cant);
+}
+
+
 
 /* ------------------  FUNCIONES TICKETS  ------------------ */
 
@@ -235,19 +439,30 @@ void mostrarListaT(struct nodoTicket *tickets){
 
     else{
         while (actual != NULL){ 
-            printf("\n\n\t\t------------------ TICKET N %d --------------------\n",i);
+            HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+            SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
+            printf("\n\t\t------------------ ");
+            SetConsoleTextAttribute(hConsole,FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
+            printf("TICKET N%d",i);
+            SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
+            printf(" --------------------\n");
+            SetConsoleTextAttribute(hConsole,FOREGROUND_RED|FOREGROUND_GREEN);
             printf("\nProducto(s):");
             struct nodoHamburguesa *aux= malloc(sizeof(struct nodoHamburguesa));
             aux = actual->hamburVender;
             struct nodoCantidadH *aux1 =malloc(sizeof(struct nodoCantidadH));
             aux1 = actual->cantidad;
+            SetConsoleTextAttribute(hConsole,FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
             while(aux != NULL){    
                 printf("\n\t%s (%d) $%d.",aux->nombre,aux1->cant,aux->precio);
                 aux = aux->sig;
                 aux1 = aux1->sig;
             }
+            SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN|FOREGROUND_BLUE);
             printf("\nValor total: $%d.",actual->precio_total);
+            SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE);
             printf("\nFecha y Hora: %s.\n\n",actual->fecha_hora);
+            SetConsoleTextAttribute(hConsole,FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
             actual=actual->sig;
             
             i++;
@@ -266,6 +481,13 @@ int main(){
     struct nodoIngrediente *listaIngre=NULL;
     struct nodoTicket *listaTicket=NULL;
     struct nodoCantidadH *cantidades = NULL;
+
+    //hora de inicii
+    time_t tiempo = time(0);
+    struct tm *tinicio = localtime(&tiempo);
+    char inicio[128];
+    strftime(inicio,128,"%Y-%m-%d  %H:%M:%S",tinicio);
+
 
     char nombre[30],nombre1[30],respuesta,opc,opc2;
     int aux,aux1,aux2=0,cant,cant1;
@@ -301,13 +523,7 @@ int main(){
     hamburguesas = insertarNodoH(hamburguesas,"Vegana",18,listaIngre);
 
     do{
-        printf("\t\t---------------- Sistema Control ----------------\n");
-        printf("\t\t-------------- Tito's Burguer & Co --------------\n");
-        printf("\n1. Ingredientes.");
-        printf("\n2. Hamburguesas.");
-        printf("\n3. Ventas.");
-        printf("\nF. Finalizar dia.\n");
-        printf("\nOpcion a Ingresar: ");
+        titos();
         scanf("%c", &respuesta);
         fflush(stdin);
         switch (respuesta){
@@ -315,13 +531,7 @@ int main(){
             case '1':
                 do{
                 system("cls");
-                printf("\t\t---------------- Opcion 1 ----------------\n");
-                printf("\t\t-------------- Ingredientes --------------\n\n");
-                    printf("\n1. Cargar nuevo Ingrediente.");
-                    printf("\n2. Actualizar Ingredientes.");
-                    printf("\n3. Ver Lista de Ingredientes.");
-                    printf("\nF. Salir\n");
-                    printf("\nOpcion a Ingresar: ");
+                    menu1();            
                     scanf("%c",&opc);
                     fflush(stdin);
                     switch (opc){
@@ -334,7 +544,8 @@ int main(){
                                 scanf("%d",&cant);
                                 fflush(stdin);
                                 ingredientes = insertarNodoI(ingredientes,nombre,cant);
-                                printf("Desea ingresar otro ingrediente? [Y/N]: ");
+                                printf("Desea ingresar otro ingrediente? [");
+                                fin();
                                 scanf("%c",&opc);
                                 fflush(stdin);
                             }while(opc != 'n' && opc != 'N');
@@ -345,7 +556,11 @@ int main(){
                             aux=1;
                             printf("Ingredientes actuales:\n");
                             while (auxI != NULL){
-                                printf("(%d) %s: %d\n",aux,auxI->nombre, auxI->cant);
+                                HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+                                SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE|FOREGROUND_GREEN);
+                                printf("(%d)",aux); 
+                                SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+                                printf(" %s: %d\n",auxI->nombre, auxI->cant);
                                 auxI=auxI->sig;
                                 aux++;
                             }
@@ -369,12 +584,12 @@ int main(){
                         break;
 
                         case 'f':
-                            printf("Saliendo...\n");
+                            salir1();
                             system("Pause");
                         break;
 
                         case 'F':
-                            printf("Saliendo...\n");
+                            salir1();
                             system("Pause");
                         break;
 
@@ -390,12 +605,7 @@ int main(){
             case '2':
                 do{
                     system("cls");
-                    printf("\t\t---------------- Opcion 2 ----------------\n");
-                    printf("\t\t---------- Menu de Hamburguesas ----------\n");
-                    printf("\n1. Ver Lista de Hambuguesas.");
-                    printf("\n2. Cargar Nueva hamburguesa.");
-                    printf("\nF. Salir\n");
-                    printf("\nOpcion a Ingresar: ");
+                    menu2();
                     scanf("%c",&opc);
                     fflush(stdin);
                     switch (opc){
@@ -423,24 +633,26 @@ int main(){
                                     scanf("%d",&cant);
                                     fflush(stdin);               
                                     listaIngre = insertarNodoI(listaIngre,nombre,cant);
-                                    printf("\tDesea ingresar otro ingrediente? [Y/N]: ");
+                                    printf("\tDesea ingresar otro ingrediente? [");
+                                    fin();
                                     scanf("%c",&opc2);
                                     fflush(stdin);
                                 }while(opc2 != 'n' && opc2 != 'N');               
                                 hamburguesas = insertarNodoH(hamburguesas,nombre1,cant1,listaIngre);
-                                printf("Desea agregar otra hamburguesa? [Y/N]: ");
+                                printf("Desea agregar otra hamburguesa? [");
+                                fin();
                                 scanf("%c",&opc);
                                 fflush(stdin);
                             }while(opc != 'n' && opc != 'N');
                         break;
 
                         case 'f':
-                            printf("Saliendo...\n");
+                            salir2();
                             system("Pause");
                         break;
 
                         case 'F':
-                            printf("Saliendo...\n");
+                            salir2();
                             system("Pause");
                         break;
 
@@ -456,12 +668,7 @@ int main(){
 
                 do{
                     system("cls");
-                    printf("\t\t---------------- Opcion 3 ----------------\n");
-                    printf("\t\t------------- Menu de Ventas -------------\n\n");
-                    printf("\n1. Realizar Venta.");
-                    printf("\n2. Mostrar Ventas.");
-                    printf("\nF. Salir\n");
-                    printf("\nOpcion a Ingresar: ");
+                    menu3();
                     scanf("%c",&opc);
                     fflush(stdin);
                     switch (opc){
@@ -474,7 +681,11 @@ int main(){
                                 fflush(stdin);
                                 auxH = hamburguesas;
                                 while (auxH != NULL){
-                                    printf("(%d) %s $%d\n",aux,auxH->nombre, auxH->precio);
+                                    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+                                    SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
+                                    printf("(%d)",aux); 
+                                    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+                                    printf("%s $%d\n",auxH->nombre, auxH->precio);
                                     auxH=auxH->sig;
                                     aux++;
                                 }
@@ -501,20 +712,21 @@ int main(){
 
                                 else printf("!! No hay ingredientes suficientes !!\n");
 
-                                printf("\nDesea agregar otra Hamburguesa? [Y/N]: ");
+                                printf("\nDesea agregar otra Hamburguesa? [");
+                                fin();
                                 scanf("%c",&opc);
                                 fflush(stdin);
 
                             }while(opc != 'n' && opc != 'N');
 
-                            if(aux2==1){
+                            if(aux2 == 1){
                                 /* ----------------  obtengo precio total ---------------- */
                                 struct nodoHamburguesa *aux4= malloc(sizeof(struct nodoHamburguesa));
                                 aux4 = auxH1;
                                 struct nodoCantidadH *aux5 =malloc(sizeof(struct nodoCantidadH));
                                 aux5 = cantidades;
                                 aux1 = 0;
-                                while(aux4 != NULL){    
+                                while(aux4 != NULL){
                                     aux = aux4->precio*aux5->cant;
                                     aux1 += aux;
                                     aux5 = aux5->sig;
@@ -522,8 +734,8 @@ int main(){
                                 }
 
                                 /* ------------------  obtengo la hora  ------------------ */
-                                time_t tiempo = time(0);
-                                struct tm *tlocal = localtime(&tiempo);
+                                time_t tiempo1 = time(0);
+                                struct tm *tlocal = localtime(&tiempo1);
                                 char horario[128];
                                 strftime(horario,128,"%Y-%m-%d  %H:%M:%S",tlocal);
                                 printf("\n\nVenta Realizada exitosamente.");
@@ -538,17 +750,18 @@ int main(){
                         break;
 
                         case '2':
+                            system("cls");
                             mostrarListaT(listaTicket);
                             system("pause");
                         break;
 
                         case 'f':
-                            printf("Saliendo...\n");
+                            salir3();
                             system("Pause");
                         break;
 
                         case 'F':
-                            printf("Saliendo...\n");
+                            salir3();
                             system("Pause");
                         break;
 
@@ -559,26 +772,22 @@ int main(){
                     }
                 }while(opc != 'f' && opc != 'F');
             break;    
-
-            case '5':
-            break;
-
-            case '6':
-            break;
                 
             case 'f':
-                printf("Desea finalizar el dia?[y/n]:");
+                printf("Desea finalizar el dia?[");
+                fin();
                 scanf("%c",&opc);
                 fflush(stdin);
-                if(opc == 'y' || opc == 'Y')
+                if(opc == 's' || opc == 'S')
                     menu = false;
             break;
 
             case 'F':
-                printf("Desea finalizar el dia?[y/n]:");
+                printf("Desea finalizar el dia?[");
+                fin();
                 scanf("%c",&opc);
                 fflush(stdin);
-                if(opc == 'y' && opc == 'Y')
+                if(opc == 's' && opc == 'S')
                     menu = false;
             break;
 
@@ -590,6 +799,28 @@ int main(){
             
         system("cls");
     }while(menu);
+
+    system("cls");
+
+    //hora de fin
+    time_t tiempo2 = time(0);
+    struct tm *tfinal = localtime(&tiempo2);
+    char fin[128];
+    strftime(fin,128,"%Y-%m-%d  %H:%M:%S",tfinal);
+
+    aux = 0;
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole,FOREGROUND_RED);
+    printf("\t\t\t\t\t VENTAS DEL DIA \n");
+    mostrarListaT(listaTicket);
+    while (listaTicket){
+        aux += listaTicket->precio_total;
+        listaTicket = listaTicket->sig;
+    }
+    SetConsoleTextAttribute(hConsole,FOREGROUND_RED);
+    printf("\n\t\tInicio Jornada: %s\tFin de Jornada: %s\n",inicio,fin);
+    printf("\n\t\t\t\t\t TOTAL GANADO: $%d\n\n",aux);
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
     system("Pause");  
     return 0;
 }
