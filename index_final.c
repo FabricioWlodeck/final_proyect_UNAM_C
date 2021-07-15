@@ -790,7 +790,6 @@ int main(){
                             do{
                                 printf("Escriba el nombre de la hamburguesa a modificar: ");
                                 gets(nombre);
-                                /* for(int i=0;i<30;i++)nombre[i]=toupper(nombre[i]); */
                                 int i=0;
                                 while(nombre[i] != '\0'){
                                     nombre[i]=toupper(nombre[i]);
@@ -842,7 +841,6 @@ int main(){
                                                     printf("\nIngrese nuevo nombre: ");
                                                     gets(nomb);
                                                     fflush(stdin);
-                                                    /* for(int i=0;i<30;i++)nomb[i]=toupper(nomb[i]); */
                                                     int i=0;
                                                     while(nomb[i] != '\0'){
                                                         nomb[i]=toupper(nomb[i]);
@@ -938,7 +936,6 @@ int main(){
                                                                 nomb[i]=toupper(nomb[i]);
                                                                 i++;
                                                             }
-                                                            /* for(int i=0;i<30;i++)nomb[i]=toupper(nomb[i]); */ 
                                                             
                                                             /*-------------- comparacion nombre ingredientes --------------*/
                                                             auxI = ingredientes;
@@ -1015,7 +1012,6 @@ int main(){
                                                         banderita =1;
                                                         printf("Nombre: ");
                                                         gets(nombre);
-                                                        /* for(int i=0;i<30;i++)nombre[i]=toupper(nombre[i]); */
                                                         int i=0;
                                                         while(nombre[i] != '\0'){
                                                             nombre[i]=toupper(nombre[i]);
