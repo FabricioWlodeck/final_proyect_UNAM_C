@@ -145,7 +145,17 @@ void menu2(){
     SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE);
     printf("2");
     SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
-    printf(". Cargar Nueva hamburguesa.\n");
+    printf(". Cargar Nueva Hamburguesa.\n");
+
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE);
+    printf("3");
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+    printf(". Modificar Hamburguesa.\n");
+
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE);
+    printf("4");
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+    printf(". Eliminar Hamburguesa.\n");
 
     SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
     printf("F");
@@ -301,22 +311,63 @@ void mostrarListaH(struct nodoHamburguesa *hamburguesas){
 
     else{
         printf("\nLista de Hamburguesas: \n\n");
+        int i=1;
+        printf("__________________________________________________________\n");
         while (actual != NULL){
-            printf("%s \t$%d\n",actual->nombre, actual->precio);
+            printf("(%d) %s \t$%d\n",i,actual->nombre, actual->precio);
             ingredientes = actual->IngrHamburguesa;
                 while(ingredientes != NULL){
-                    if(ingredientes->sig == NULL)
+                    if(ingredientes->sig == NULL){
                         printf(" %s: %d\n",ingredientes->nombre, ingredientes->cant);
+                        printf("__________________________________________________________");}
                     else
                         printf(" %s: %d ->",ingredientes->nombre, ingredientes->cant);
                     ingredientes=ingredientes->sig;
                 }
             actual=actual->sig;
             printf("\n");
+            i++;
         }
     printf("\n\n");
     }
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void eliminarHamburguesa(struct nodoHamburguesa **hamburguesas, char nombre[30]){
+    int size_nodo = sizeof(struct nodoHamburguesa);
+    struct nodoHamburguesa *actual=malloc(size_nodo);
+    struct nodoHamburguesa *anterior=malloc(size_nodo); 
+    actual = *hamburguesas;
+    if(actual == NULL){
+        printf("\nEl menu de Hamburguesas se encuentra Vacio \n");
+        return;
+    }
+    
+    if(actual != NULL && strcmp(actual->nombre,nombre)==0){
+        *hamburguesas = actual->sig;
+        free(actual);
+        printf("'%s' ha sido eliminado correctamente.\n",nombre);
+        system("pause");
+        return;
+    }
+
+    while(actual != NULL && strcmp(actual->nombre,nombre)!=0){
+        anterior =actual;
+        actual = actual->sig;
+    }
+
+    if(actual == NULL){
+        printf("\n%s NO ha sido encontrado\n",nombre);
+        return;
+    }
+    anterior->sig = actual->sig;
+    free(actual);
+    printf("'%s' ha sido eliminado correctamente.\n",nombre);
+    system("pause");
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /* ------------------- FUNCION COMPARACION VENTAS ------------------- */
 
@@ -489,45 +540,45 @@ int main(){
     strftime(inicio,128,"%Y-%m-%d  %H:%M:%S",tinicio);
 
 
-    char nombre[30],nombre1[30],respuesta,opc,opc2;
-    int aux,aux1,aux2=0,cant,cant1;
+    char nombre[30],nombre1[30],respuesta,opc,opc2,opc3,auxiliar[30];
+    int aux,aux1,aux2=0,aux3,cant,cant1;
     bool menu=true;
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
-    ingredientes = insertarNodoI(ingredientes,"Pan",20);
-    ingredientes = insertarNodoI(ingredientes,"Medallon",20);
-    ingredientes = insertarNodoI(ingredientes,"Cheddar",20);
-    ingredientes = insertarNodoI(ingredientes,"Panceta",30);
-    ingredientes = insertarNodoI(ingredientes,"Tomate",10);
-    ingredientes = insertarNodoI(ingredientes,"Lechuga",30);
+    ingredientes = insertarNodoI(ingredientes,"PAN",20);
+    ingredientes = insertarNodoI(ingredientes,"MEDALLON",20);
+    ingredientes = insertarNodoI(ingredientes,"CHEDDAR",20);
+    ingredientes = insertarNodoI(ingredientes,"PANCETA",30);
+    ingredientes = insertarNodoI(ingredientes,"TOMATE",10);
+    ingredientes = insertarNodoI(ingredientes,"LECHUGA",30);
 
-    listaIngre = insertarNodoI(listaIngre,"Pan",2);
-    listaIngre = insertarNodoI(listaIngre,"Medallon",2);
-    listaIngre = insertarNodoI(listaIngre,"Cheddar",2);
-    listaIngre = insertarNodoI(listaIngre,"Panceta",3);
-    hamburguesas = insertarNodoH(hamburguesas,"Bacon&Cheddar",30,listaIngre);
-
-    listaIngre=NULL;
-
-    listaIngre = insertarNodoI(listaIngre,"Pan",2);
-    listaIngre = insertarNodoI(listaIngre,"Medallon",1);
-    listaIngre = insertarNodoI(listaIngre,"Tomate",2);
-    listaIngre = insertarNodoI(listaIngre,"Lechuga",1);
-    hamburguesas = insertarNodoH(hamburguesas,"Simple",20,listaIngre);
+    listaIngre = insertarNodoI(listaIngre,"PAN",2);
+    listaIngre = insertarNodoI(listaIngre,"MEDALLON",2);
+    listaIngre = insertarNodoI(listaIngre,"CHEDDAR",2);
+    listaIngre = insertarNodoI(listaIngre,"PANCETA",3);
+    hamburguesas = insertarNodoH(hamburguesas,"BACON&CHEDDAR",30,listaIngre);
 
     listaIngre=NULL;
 
-    listaIngre = insertarNodoI(listaIngre,"Pan",2);
-    listaIngre = insertarNodoI(listaIngre,"Medallon lentejas",1);
-    listaIngre = insertarNodoI(listaIngre,"Tomate",1);
-    listaIngre = insertarNodoI(listaIngre,"Lechuga",1);
-    hamburguesas = insertarNodoH(hamburguesas,"Vegana",18,listaIngre);
+    listaIngre = insertarNodoI(listaIngre,"PAN",2);
+    listaIngre = insertarNodoI(listaIngre,"MEDALLON",1);
+    listaIngre = insertarNodoI(listaIngre,"TOMATE",2);
+    listaIngre = insertarNodoI(listaIngre,"LECHUGA",1);
+    hamburguesas = insertarNodoH(hamburguesas,"SIMPLE",20,listaIngre);
+
+    listaIngre=NULL;
+
+    listaIngre = insertarNodoI(listaIngre,"PAN",2);
+    listaIngre = insertarNodoI(listaIngre,"MEDALLON LENTEJA",1);
+    listaIngre = insertarNodoI(listaIngre,"TOMATE",1);
+    listaIngre = insertarNodoI(listaIngre,"LECHUGA",1);
+    hamburguesas = insertarNodoH(hamburguesas,"VEGANA",18,listaIngre);
 
     do{
         titos();
         scanf("%c", &respuesta);
         fflush(stdin);
         switch (respuesta){
-
             case '1':
                 do{
                 system("cls");
@@ -537,13 +588,37 @@ int main(){
                     switch (opc){
                         case '1':
                             do{
+                                int banderita =1;
                                 printf("Nombre: ");
                                 gets(nombre);
+                                int i=0;
+                                while(nombre[i] != '\0'){
+                                    nombre[i]=toupper(nombre[i]);
+                                    i++;
+                                }
                                 fflush(stdin);
-                                printf("Cantidad: "); 
-                                scanf("%d",&cant);
-                                fflush(stdin);
-                                ingredientes = insertarNodoI(ingredientes,nombre,cant);
+                                 do{ 
+                                    printf("Cantidad: ");
+                                    scanf("%d",&cant);
+                                    fflush(stdin);
+                                    if(cant<=0){
+                                        SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
+                                        printf("\nPorfavor Ingrese una cantidad valida.\n");
+                                        SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+                                    }
+                                }while(cant <= 0);
+                                /*-------------- comparacion nombre ingredientes --------------*/
+                                auxI = ingredientes;
+                                    while (auxI){
+                                        if(strcmp(auxI->nombre,nombre)==0){ //recorro lista de ingredientes y voy comparando el nombres con el recien ingresado 
+                                            banderita = 0; //si encuentra el mismo nombre en la lista de ingredientes, banderita = false;
+                                        }
+                                        auxI = auxI->sig;
+                                }
+                                if(banderita!=1)printf("El ingrediente %s ya se encuentra en la lista, agregando cantidad...\n",nombre);
+            
+                                banderita?ingredientes = insertarNodoI(ingredientes,nombre,cant):restock(ingredientes,nombre,cant);
+
                                 printf("Desea ingresar otro ingrediente? [");
                                 fin();
                                 scanf("%c",&opc);
@@ -556,7 +631,6 @@ int main(){
                             aux=1;
                             printf("Ingredientes actuales:\n");
                             while (auxI != NULL){
-                                HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
                                 SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE|FOREGROUND_GREEN);
                                 printf("(%d)",aux); 
                                 SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
@@ -564,15 +638,31 @@ int main(){
                                 auxI=auxI->sig;
                                 aux++;
                             }
-                            printf("\nOpcion a elegir: ");
-                            scanf("%d",&aux);
-                            fflush(stdin);
-                            printf("Cantidad a agregar: "); 
-                            scanf("%d",&cant);
+                            do{
+                                printf("\nOpcion a elegir: ");
+                                scanf("%d",&aux1);
+                                fflush(stdin);
+                                if(aux1<=0 || aux1>aux){
+                                    SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
+                                    printf("\nPorfavor Ingrese una opcion valida.\n");
+                                    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+                                }
+                            }while(aux1 > aux || aux1 <= 0);
+                            do{ 
+                                printf("Cantidad a agregar: "); 
+                                scanf("%d",&cant);
+                                fflush(stdin);
+                                if(cant<=0){
+                                    SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
+                                    printf("\nPorfavor Ingrese una cantidad valida.\n");
+                                    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+                                }
+                            }while(cant <= 0);
+
                             fflush(stdin);
                             auxI= ingredientes;
 
-                            for(int i=0;i<(aux-1);i++){
+                            for(int i=0;i<(aux1-1);i++){
                                 auxI=auxI->sig;
                             }
                             restock(ingredientes,auxI->nombre,cant);
@@ -619,31 +709,427 @@ int main(){
                             do{
                                 printf("Nombre: ");
                                 gets(nombre1);
+                                for(int i=0;i<30;i++)nombre1[i]=toupper(nombre1[i]);
                                 fflush(stdin);
-                                printf("Precio: "); 
-                                scanf("%d",&cant1);
-                                fflush(stdin); 
+                                do{ 
+                                    printf("Precio: "); 
+                                    scanf("%d",&cant1);
+                                    fflush(stdin);
+                                    if(cant1<=0){
+                                        SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
+                                        printf("\nPorfavor Ingrese un precio valido.\n");
+                                        SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+                                    }
+                                }while(cant1 <= 0);
                                 printf("Ingredientes: \n");
                                 listaIngre = NULL; 
                                 do{
+                                    int banderita = 1;
                                     printf("\tNombre: ");
                                     gets(nombre);
-                                    fflush(stdin);
-                                    printf("\tCantidad: "); 
-                                    scanf("%d",&cant);
-                                    fflush(stdin);               
+                                    int i=0;
+                                    while(nombre[i] != '\0'){
+                                        nombre[i]=toupper(nombre[i]);
+                                        i++;
+                                    }
+
+                                    do{ 
+                                        printf("\tCantidad: ");
+                                        scanf("%d",&cant);
+                                        fflush(stdin);
+                                        if(cant<=0){
+                                            SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
+                                            printf("\t\nPorfavor Ingrese una cantidad valida.\n");
+                                            SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+                                        }
+                                    }while(cant <= 0);
+
+                                    fflush(stdin); 
+
                                     listaIngre = insertarNodoI(listaIngre,nombre,cant);
+
+                                    /*-------------- comparacion nombre ingredientes --------------*/
+                                    auxI = ingredientes;
+                                    while (auxI){
+                                        if(strcmp(auxI->nombre,nombre)==0){ //recorro lista de ingredientes y voy comparando el nombres con el recien ingresado 
+                                            banderita = 0; //si encuentra el mismo nombre en la lista de ingredientes, banderita = false;
+                                        }
+                                        auxI = auxI->sig;
+                                    }
+
+                                    if(banderita){
+                                        printf("\tEl ingrediente %s no existe actualmente en la lista. Desea agregarlo? [",nombre);
+                                        fin();
+                                        scanf("%c",&opc3);
+                                        fflush(stdin);
+                                        if(opc3 == 'n' && opc3 == 'n'){
+                                            printf("\tEl Ingrediente no ha sido agregado a la lista.\n");
+                                        }
+                                        else{
+                                            ingredientes = insertarNodoI(ingredientes,nombre,0);
+                                        }
+                                    }
+
                                     printf("\tDesea ingresar otro ingrediente? [");
                                     fin();
                                     scanf("%c",&opc2);
                                     fflush(stdin);
-                                }while(opc2 != 'n' && opc2 != 'N');               
+                                }while(opc2 != 'n' && opc2 != 'N');           
+                                
                                 hamburguesas = insertarNodoH(hamburguesas,nombre1,cant1,listaIngre);
                                 printf("Desea agregar otra hamburguesa? [");
                                 fin();
                                 scanf("%c",&opc);
                                 fflush(stdin);
                             }while(opc != 'n' && opc != 'N');
+                        break;
+
+                        case '3': ;
+                            int banderita = 1;
+                            mostrarListaH(hamburguesas);
+                            do{
+                                printf("Escriba el nombre de la hamburguesa a modificar: ");
+                                gets(nombre);
+                                /* for(int i=0;i<30;i++)nombre[i]=toupper(nombre[i]); */
+                                int i=0;
+                                while(nombre[i] != '\0'){
+                                    nombre[i]=toupper(nombre[i]);
+                                    i++;
+                                }
+                                auxH = hamburguesas;
+                                while(auxH){
+                                    if(strcmp(auxH->nombre,nombre)==0){
+                                        banderita = 0;
+                                        break;
+                                    }
+                                    auxH = auxH->sig;
+                                }
+                                if(banderita){
+                                    SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
+                                    printf("\nNombre Incorrecto, porfavor ingrese nuevamente.\n");
+                                    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
+                                }
+                            }while(banderita==1); 
+                            struct nodoHamburguesa *actual=malloc(sizeof(struct nodoHamburguesa)); // creamos el nuevo nodo
+                            actual = hamburguesas;
+                            char auxiliar[30],nomb[30],opc4,opc5;
+                            int price,aux=0,aux1,cant;
+
+                            HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+                            if(hamburguesas->IngrHamburguesa == NULL)printf("\n!! La lista de hamburguesas esta vacia !!\n");
+
+                            else{
+                                while (actual != NULL){
+                                    if(strcmp(actual->nombre,nombre)==0){
+                                        do{ system("cls");
+                                            SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE);
+                                            printf("\t\n%s\n",actual->nombre);
+                                            SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+                                            printf("\n1. Modificar Nombre.");
+                                            printf("\n2. Modificar Precio.");
+                                            printf("\n3. Modificar Ingredientes.");
+                                            printf("\n4. Agregar Ingredientes.");
+                                            printf("\nf. Salir.\n");
+                                            printf("\nOpcion a elegir: ");
+                                            scanf("%c",&opc4);
+                                            fflush(stdin);
+
+                                            switch (opc4){
+
+                                                case '1':
+                                                    printf("\nNombre Actual: %s",actual->nombre);
+                                                    printf("\nIngrese nuevo nombre: ");
+                                                    gets(nomb);
+                                                    fflush(stdin);
+                                                    /* for(int i=0;i<30;i++)nomb[i]=toupper(nomb[i]); */
+                                                    int i=0;
+                                                    while(nomb[i] != '\0'){
+                                                        nomb[i]=toupper(nomb[i]);
+                                                        i++;
+                                                    }
+                                                    strcpy(actual->nombre,nomb);
+                                                break;
+                                                
+                                                case '2':
+                                                    printf("\nPrecio Actual: $%d",actual->precio);
+                                                    do{ 
+                                                        do{
+                                                            printf("\nIngrese nuevo precio: ");
+                                                            gets(auxiliar);
+                                                            fflush(stdin);
+                                                            if(atoi(auxiliar)){
+                                                                price = atoi(auxiliar);
+                                                            }
+                                                            else{
+                                                                SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
+                                                                printf("\nPor favor Ingrese una cantidad valida.\n\n");
+                                                                SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+                                                            }
+                                                        }while(atoi(auxiliar)==0);
+                                                        if(price<=0){
+                                                            SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
+                                                            printf("\nPorfavor Ingrese una cantidad valida.\n");
+                                                            SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+                                                        }
+                                                    }while(price <= 0);
+                                                    actual->precio=price;
+                                                break;
+
+                                                case '3':
+                                                    aux=0;
+                                                    struct nodoIngrediente *ingre = malloc(sizeof(struct nodoIngrediente));
+                                                    ingre = actual->IngrHamburguesa;
+                                                    while(ingre){
+                                                        SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE);
+                                                        printf("(%d)",aux+1);
+                                                        SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+                                                        printf(" %s: %d\n",ingre->nombre, ingre->cant);
+                                                        ingre=ingre->sig;
+                                                        aux++;
+                                                    }
+
+                                                    do{
+                                                        do{
+                                                            printf("\nOpcion a elegir: ");
+                                                            gets(auxiliar);
+                                                            fflush(stdin);
+                                                            if(atoi(auxiliar)){
+                                                                aux1 = atoi(auxiliar);
+                                                            }
+                                                            else{
+                                                                SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
+                                                                printf("\nPor favor Ingrese una opcion valida.\n");
+                                                                SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+                                                            }
+                                                        }while(atoi(auxiliar)==0);
+                                                        if(aux1<=0 || aux1>aux){
+                                                            SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
+                                                            printf("\nPorfavor Ingrese una opcion valida.\n");
+                                                            SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+                                                        }
+                                                    }while(aux1 > aux || aux1 <= 0);
+
+                                                    ingre = actual->IngrHamburguesa;
+
+                                                    for(int i=0;i<(aux1-1);i++){
+                                                            ingre=ingre->sig;
+                                                    }
+
+                                                    do{
+                                                        system("cls");
+                                                        printf("\nQue desea modificar del ingrediente %s?\n\n",ingre->nombre);
+                                                        printf("1. Nombre.\n");
+                                                        printf("2. Cantidad.\n");
+                                                        printf("f. Salir.\n");
+                                                        printf("\nOpcion a elegir: ");
+                                                        scanf("%c",&opc5);
+                                                        fflush(stdin);
+                                                        switch(opc5){
+
+                                                        case '1':
+                                                            banderita = 1;
+                                                            printf("\nNombre Actual: %s",ingre->nombre);
+                                                            printf("\nIngrese nuevo nombre: ");
+                                                            gets(nomb);
+                                                            fflush(stdin);
+                                                            int i=0;
+                                                            while(nomb[i] != '\0'){
+                                                                nomb[i]=toupper(nomb[i]);
+                                                                i++;
+                                                            }
+                                                            /* for(int i=0;i<30;i++)nomb[i]=toupper(nomb[i]); */ 
+                                                            
+                                                            /*-------------- comparacion nombre ingredientes --------------*/
+                                                            auxI = ingredientes;
+                                                            while (auxI){
+                                                                if(strcmp(auxI->nombre,nomb)==0){ //recorro lista de ingredientes y voy comparando el nombres con el recien ingresado 
+                                                                    banderita = 0; //si encuentra el mismo nombre en la lista de ingredientes, banderita = false;
+                                                                }
+                                                                auxI = auxI->sig;
+                                                            }
+
+                                                            if(banderita){
+                                                                printf("\tEl ingrediente %s no existe actualmente en la lista. Desea agregarlo? [",nomb);
+                                                                fin();
+                                                                scanf("%c",&opc3);
+                                                                fflush(stdin);
+                                                                if(opc3 == 'n' && opc3 == 'n'){
+                                                                    printf("\tEl Ingrediente no ha sido agregado a la lista.\n");
+                                                                }
+                                                                else{
+                                                                    ingredientes = insertarNodoI(ingredientes,nomb,0);
+                                                                }
+                                                            }
+                                                            strcpy(ingre->nombre,nomb);
+
+                                                        break;
+                                                        
+                                                        case '2':
+                                                            printf("\nCantidad Actual: %s",ingre->nombre);
+                                                            do{
+                                                                do{
+                                                                    printf("\nIngrese nueva cantidad: ");
+                                                                    gets(auxiliar);
+                                                                    fflush(stdin);
+                                                                    if(atoi(auxiliar)){
+                                                                        cant = atoi(auxiliar);
+                                                                    }
+                                                                    else{
+                                                                        SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
+                                                                        printf("\nPor favor Ingrese una cantidad valida.\n\n");
+                                                                        SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+                                                                    }
+                                                                }while(atoi(auxiliar)==0);
+                                                                    if(cant<=0){
+                                                                        SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
+                                                                        printf("\nPorfavor Ingrese una cantidad valida.\n");
+                                                                        SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+                                                                    }
+                                                            }while(cant <= 0);
+                                                            ingre->cant = cant;
+                                                        break;
+
+                                                        case 'f':
+                                                            salir2();
+                                                            system("Pause");
+                                                            break;
+
+                                                        case 'F':
+                                                            salir2();
+                                                            system("Pause");
+                                                            break;
+
+                                                        default:
+                                                            printf("\nOpcion no valida. Por favor reingrese.\n");
+                                                            system("Pause");  
+                                                            break;
+                                                        }
+                                                    }while(opc5 != 'f' && opc5 != 'F');
+
+                                                break;
+
+                                                case '4':
+                                                    do{
+                                                        // COMPARAR CON NOMBRES DE INGREDIENTES EXISTENTES EN LA LISTA
+                                                        banderita =1;
+                                                        printf("Nombre: ");
+                                                        gets(nombre);
+                                                        /* for(int i=0;i<30;i++)nombre[i]=toupper(nombre[i]); */
+                                                        int i=0;
+                                                        while(nombre[i] != '\0'){
+                                                            nombre[i]=toupper(nombre[i]);
+                                                            i++;
+                                                        }
+                                                        fflush(stdin);
+                                                        do{ 
+                                                            do{
+                                                                printf("Cantidad: ");
+                                                                gets(auxiliar);
+                                                                fflush(stdin);
+                                                                if(atoi(auxiliar)){
+                                                                    cant = atoi(auxiliar);
+                                                                }
+                                                                else{
+                                                                    SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
+                                                                    printf("\nPor favor Ingrese una cantidad valida.\n\n");
+                                                                    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+                                                                }
+                                                            }while(atoi(auxiliar)==0);
+                                                            if(cant<=0){
+                                                                SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
+                                                                printf("\nPor favor Ingrese una cantidad valida.\n\n");
+                                                                SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+                                                            }
+                                                        }while(cant <= 0);
+                                                    
+                                                        
+                                                        actual->IngrHamburguesa = insertarNodoI(actual->IngrHamburguesa,nombre,cant);
+
+                                                        /*-------------- comparacion nombre ingredientes --------------*/
+                                                        auxI = ingredientes;
+                                                        while (auxI){
+                                                            if(strcmp(auxI->nombre,nombre)==0){ //recorro lista de ingredientes y voy comparando el nombres con el recien ingresado 
+                                                                banderita = 0; //si encuentra el mismo nombre en la lista de ingredientes, banderita = false;
+                                                            }
+                                                            auxI = auxI->sig;
+                                                        }
+
+                                                        if(banderita){
+                                                            printf("El ingrediente %s no existe actualmente en la lista. Desea agregarlo? [",nombre);
+                                                            fin();
+                                                            scanf("%c",&opc3);
+                                                            fflush(stdin);
+                                                            if(opc3 == 'n' && opc3 == 'n'){
+                                                                printf("El Ingrediente no ha sido agregado a la lista.\n");
+                                                            }
+                                                            else{
+                                                                ingredientes = insertarNodoI(ingredientes,nombre,0);
+                                                            }
+                                                        }
+
+                                                        printf("Desea ingresar otro ingrediente? [");
+                                                        fin();
+                                                        scanf("%c",&opc2);
+                                                        fflush(stdin);
+                                                    }while(opc2 != 'n' && opc2 != 'N'); 
+                                                    
+                                                break;
+
+                                                case 'f':
+                                                    salir2();
+                                                    system("Pause");
+                                                break;
+
+                                                case 'F':
+                                                    salir2();
+                                                    system("Pause");
+                                                break;
+
+                                                default:
+                                                printf("\nOpcion no valida. Por favor reingrese.\n");
+                                                system("Pause");                            
+                                                break;
+                                            }
+
+                                        }while(opc4 != 'f' && opc4 != 'F');    
+                                    }
+                                    actual=actual->sig;
+                                }
+                            }
+                            system("Pause");
+                        break;
+
+                        case '4':
+                            mostrarListaH(hamburguesas);
+                            printf("Ingrese el nombre de la hamburguesa a eliminar: ");
+                            auxH = hamburguesas;
+                            char nombre[30];
+                            int bandera=1;
+                            do{
+                                gets(nombre);
+                                int i=0;
+                                while(nombre[i] != '\0'){
+                                    nombre[i]=toupper(nombre[i]);
+                                    i++;
+                                }
+                                fflush(stdin);
+                                while(auxH != NULL){
+                                    if(strcmp(auxH->nombre,nombre)==0){
+                                        bandera=0;
+                                        break;
+                                    }
+                                    auxH=auxH->sig;
+                                }
+                                if(bandera){
+                                    SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
+                                    printf("\nNombre Ingresado no Coincidente.\n");
+                                    SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
+                                }
+                            }while(bandera==1);
+                            
+                            eliminarHamburguesa(&hamburguesas,nombre);
+                            system("Pause");
                         break;
 
                         case 'f':
@@ -683,23 +1169,59 @@ int main(){
                                 while (auxH != NULL){
                                     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
                                     SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
-                                    printf("(%d)",aux); 
+                                    printf("(%d)",aux+1); 
                                     SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
                                     printf("%s $%d\n",auxH->nombre, auxH->precio);
                                     auxH=auxH->sig;
                                     aux++;
                                 }
-                                fflush(stdin);
-                                printf("\nOpcion a elegir: ");
-                                scanf("%d",&aux);
-                                fflush(stdin);
-                                printf("Cantidad: ");
-                                scanf("%d",&aux1);
+                                do{
+                                    do{
+                                        printf("\nOpcion a elegir: ");
+                                        gets(auxiliar);
+                                        fflush(stdin);
+                                        if(atoi(auxiliar)){
+                                            aux3 = atoi(auxiliar);
+                                        }
+                                        else{
+                                            SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
+                                            printf("\nPor favor Ingrese una cantidad valida.\n");
+                                            SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+                                        }
+                                    }while(atoi(auxiliar)==0);
+
+                                    if(aux3<=0 || aux3>aux){
+                                        SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
+                                        printf("\nPorfavor Ingrese una opcion valida.\n");
+                                        SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+                                    }
+                                }while(aux3 > aux || aux3 <= 0);
+
+                                do{ 
+                                    do{
+                                        printf("Cantidad: ");
+                                        gets(auxiliar);
+                                        fflush(stdin);
+                                        if(atoi(auxiliar)){
+                                            aux1 = atoi(auxiliar);
+                                        }
+                                        else{
+                                            SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
+                                            printf("\nPor favor Ingrese una cantidad valida.\n");
+                                            SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+                                        }
+                                    }while(atoi(auxiliar)==0);
+                                    if(aux1<=0){
+                                        SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
+                                        printf("\nPorfavor Ingrese una cantidad valida.\n");
+                                        SetConsoleTextAttribute(hConsole, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+                                    }
+                                }while(aux1 <= 0);
                                 fflush(stdin);
                                 auxH = hamburguesas;
                                 fflush(stdin);
 
-                                for(int i=0;i<(aux-1);i++){
+                                for(int i=0;i<(aux3-1);i++){
                                     auxH=auxH->sig;
                                 }
 
@@ -795,8 +1317,7 @@ int main(){
                 printf("\nOpcion no valida. Por favor reingrese.\n");
                 system("Pause");
             break;
-            }
-            
+            }          
         system("cls");
     }while(menu);
 
@@ -809,7 +1330,6 @@ int main(){
     strftime(fin,128,"%Y-%m-%d  %H:%M:%S",tfinal);
 
     aux = 0;
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(hConsole,FOREGROUND_RED);
     printf("\t\t\t\t\t VENTAS DEL DIA \n");
     mostrarListaT(listaTicket);
